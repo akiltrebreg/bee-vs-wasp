@@ -24,7 +24,7 @@ def train(cfg: DictConfig):
 
     model = BeeClassifier(cfg.model.num_classes)
     module = BeeLightningModule(
-        model, lr=cfg.model.lr, momentum=0.9, num_classes=cfg.data.num_classes
+        model, lr=cfg.model.lr, momentum=cfg.model.momentum, num_classes=cfg.data.num_classes
     )
 
     logger = TensorBoardLogger("tb_logs", name=cfg.train.logger_name)
