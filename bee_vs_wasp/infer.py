@@ -1,3 +1,5 @@
+import subprocess
+
 import lightning as l
 import torch
 
@@ -13,11 +15,12 @@ def infer(
     num_workers: int = 4,
     lr: float = 0.001,
 ):
+    subprocess.run(["dvc", "pull"], check=True)
+
     dm = BeeDataModule(dataset_root=dataset_root, batch_size=batch_size, num_workers=num_workers)
 
-    model = BeeClassifier()
-    module = BeeLightningModule(model, lr=lr)
-
+    model = BeeClassifier(num_classes=dm.num_classes)
+    module = BeeLightningModule(model, lr=lr, num_classes=dm.num_classes)
     module.model.load_state_dict(torch.load(model_path))
 
     trainer = l.Trainer()
