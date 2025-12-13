@@ -1,0 +1,8 @@
+data:
+  dataset_root: ${oc.env:DATA_DIR}
+  labels_path: ${oc.env:LABELS_PATH}
+  imgdir: ${oc.env:IMGDIR}
+  batch_size: 32
+  num_workers: 6
+  num_classes: 4
+  momentum: 0.9

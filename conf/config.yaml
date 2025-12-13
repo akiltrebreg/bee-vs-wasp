@@ -1,0 +1,7 @@
+defaults:
+  - data: datamodule
+  - model: resnet
+  - train: trainer
+
+num_epochs: 15
+output_file: bee_wasp_model.pt

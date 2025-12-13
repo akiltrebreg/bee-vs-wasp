@@ -1,0 +1,4 @@
+train:
+  logger_name: bee_wasp
+  accelerator: auto
+  devices: auto
