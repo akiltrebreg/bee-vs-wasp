@@ -4,3 +4,4 @@
     url = s3://bee-wasp-data
     endpointurl = https://storage.yandexcloud.net
     region = ru-central1
+    public = true
