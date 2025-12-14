@@ -1,5 +1,6 @@
 [core]
     remote = yandex
+
 ['remote "yandex"']
     url = http://bee-wasp-data
     endpointurl = https://storage.yandexcloud.net
