@@ -66,6 +66,9 @@ select = [
 
 pycodestyle = { max-doc-length = 105 }
 
+[tool.ruff.lint.isort]
+known-first-party = ["bee_vs_wasp"]
+
 # [tool.ruff.lint.per-file-ignores]
 # "__init__.py" = ["E402"]
 # "**/{tests,docs,tools}/*" = ["E402"]

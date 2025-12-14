@@ -1,14 +1,11 @@
-import subprocess
-
 import fire
 
+from bee_vs_wasp.train import train
 
-def train():
-    """
-    Fire wrapper to run the Hydra-decorated train function
-    """
-    subprocess.run(["python", "-m", "bee_vs_wasp.train"], check=True)
+
+def main() -> None:
+    fire.Fire({"train": train})
 
 
 if __name__ == "__main__":
-    fire.Fire({"train": train})
+    main()
