@@ -1,5 +1,4 @@
-model:
-  num_classes: 4
-  type: "resnet18"
-  lr: 0.001
-  momentum: 0.9
+# conf/model/resnet.yaml
+num_classes: 4
+lr: 0.001
+momentum: 0.9
