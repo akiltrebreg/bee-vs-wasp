@@ -17,6 +17,7 @@ dependencies = [
     "torchvision>=0.24.1",
     "fire>=0.7.1",
     "mlflow>=3.7.0",
+    "gitpython>=3.1.45",
 ]
 
 [dependency-groups]
