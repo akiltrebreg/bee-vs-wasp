@@ -1,5 +1,5 @@
 data:
-  dataset_root: ${oc.env:DATA_DIR}
+  dataset_root: "${hydra:runtime.cwd}/data"
   batch_size: 32
   num_workers: 6
   num_classes: 4
