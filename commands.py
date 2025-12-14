@@ -1,7 +1,14 @@
+import subprocess
+
 import fire
 
-from bee_vs_wasp.infer import infer  # noqa: F401
-from bee_vs_wasp.train import train  # noqa: F401
+
+def train():
+    """
+    Fire wrapper to run the Hydra-decorated train function
+    """
+    subprocess.run(["python", "-m", "bee_vs_wasp.train"], check=True)
+
 
 if __name__ == "__main__":
-    fire.Fire()
+    fire.Fire({"train": train})

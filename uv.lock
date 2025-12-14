@@ -231,6 +231,7 @@ version = "0.1.0"
 source = { virtual = "." }
 dependencies = [
     { name = "dvc", extra = ["s3"] },
+    { name = "fire" },
     { name = "lightning" },
     { name = "numpy" },
     { name = "opencv-python" },
@@ -244,7 +245,6 @@ dependencies = [
 
 [package.dev-dependencies]
 dev = [
-    { name = "fire" },
     { name = "pre-commit" },
     { name = "ruff" },
 ]
@@ -252,6 +252,7 @@ dev = [
 [package.metadata]
 requires-dist = [
     { name = "dvc", extras = ["s3"], specifier = ">=3.64.2" },
+    { name = "fire", specifier = ">=0.7.1" },
     { name = "lightning", specifier = ">=2.6.0" },
     { name = "numpy", specifier = ">=2.3.5" },
     { name = "opencv-python", specifier = ">=4.11.0.86" },
@@ -265,7 +266,6 @@ requires-dist = [
 
 [package.metadata.requires-dev]
 dev = [
-    { name = "fire", specifier = ">=0.7.1" },
     { name = "pre-commit", specifier = ">=4.5.0" },
     { name = "ruff", specifier = ">=0.14.9" },
 ]

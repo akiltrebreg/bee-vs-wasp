@@ -5,3 +5,7 @@ defaults:
 
 num_epochs: 15
 output_file: bee_wasp_model.pt
+
+mlflow:
+  tracking_uri: "http://127.0.0.1:8080"
+  experiment_name: "bee-vs-wasp"
