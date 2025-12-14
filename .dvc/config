@@ -1,7 +1,4 @@
 [core]
     remote = yandex
-
 ['remote "yandex"']
-    url = http://bee-wasp-data
-    endpointurl = https://storage.yandexcloud.net
-    region = ru-central1
+    url = https://storage.yandexcloud.net/bee-wasp-data
