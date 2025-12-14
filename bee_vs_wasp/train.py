@@ -9,7 +9,7 @@ from bee_vs_wasp.model import BeeClassifier
 from bee_vs_wasp.module import BeeLightningModule
 
 
-@hydra.main(version_base=None, config_path="conf", config_name="config")
+@hydra.main(version_base=None, config_path="./conf", config_name="config")
 def train(cfg: DictConfig):
     # subprocess.run(["dvc", "pull"], check=True) return import subprocess
     dm = BeeDataModule(
