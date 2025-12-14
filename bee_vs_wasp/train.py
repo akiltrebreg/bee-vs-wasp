@@ -1,3 +1,5 @@
+import subprocess
+
 import hydra
 import lightning as l
 import torch
@@ -11,7 +13,7 @@ from bee_vs_wasp.module import BeeLightningModule
 
 @hydra.main(version_base=None, config_path="./conf", config_name="config")
 def train(cfg: DictConfig):
-    # subprocess.run(["dvc", "pull"], check=True) return import subprocess
+    subprocess.run(["dvc", "pull"], check=True)
     dm = BeeDataModule(
         dataset_root=cfg.data.dataset_root,
         batch_size=cfg.data.batch_size,
