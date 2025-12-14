@@ -1,4 +1,4 @@
-architecture: resnet18
+architecture: simple_cnn
 num_classes: 4
 lr: 0.001
 momentum: 0.9

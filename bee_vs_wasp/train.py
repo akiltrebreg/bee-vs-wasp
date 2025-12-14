@@ -7,7 +7,7 @@ from lightning.pytorch.loggers import TensorBoardLogger
 from omegaconf import DictConfig
 
 from bee_vs_wasp.data import BeeDataModule
-from bee_vs_wasp.model import BeeClassifier
+from bee_vs_wasp.model import BeeClassifier, SimpleCNN
 from bee_vs_wasp.module import BeeLightningModule
 
 
@@ -21,7 +21,13 @@ def train(cfg: DictConfig):
         num_classes=cfg.data.num_classes,
     )
 
-    model = BeeClassifier(cfg.model.num_classes)
+    if cfg.model.architecture == "resnet18":
+        model = BeeClassifier(cfg.model.num_classes)
+    elif cfg.model.architecture == "simple_cnn":
+        model = SimpleCNN(cfg.model.num_classes)
+    else:
+        raise ValueError(f"Unknown architecture: {cfg.model.architecture}")
+
     module = BeeLightningModule(
         model, lr=cfg.model.lr, momentum=cfg.model.momentum, num_classes=cfg.data.num_classes
     )
