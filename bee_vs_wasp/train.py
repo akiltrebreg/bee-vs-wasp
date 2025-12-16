@@ -1,4 +1,5 @@
 import subprocess
+from datetime import datetime
 from pathlib import Path
 
 import git
@@ -97,10 +98,15 @@ class TrainingPipeline:
 
         trainer.fit(module, datamodule=dm)
 
-        output_path = Path(self.cfg.output_file)
+        models_dir = Path("models")
+        models_dir.mkdir(parents=True, exist_ok=True)
+
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        model_filename = f"{self.cfg.model.architecture}_{timestamp}.pth"
+        output_path = models_dir / model_filename
+
         torch.save(module.model.state_dict(), output_path)
 
-        # Log model artifact to MLflow
         logger.experiment.log_artifact(logger.run_id, str(output_path))
 
 
