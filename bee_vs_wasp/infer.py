@@ -11,17 +11,37 @@ from bee_vs_wasp.module import BeeLightningModule
 
 
 class InferencePipeline:
-    """Inference pipeline for trained models."""
+    """Inference pipeline for evaluating trained models on test data.
+
+    Handles data loading, model weight loading, and test evaluation
+    using PyTorch Lightning Trainer.
+    """
 
     def __init__(self, cfg: DictConfig):
+        """Initialize inference pipeline.
+
+        Args:
+            cfg: Hydra configuration with model_path, dataset_root,
+                 batch_size, num_workers, num_classes, lr, momentum
+        """
         self.cfg = cfg
 
     def _pull_data(self):
-        """Pull data using DVC."""
+        """Pull test data using DVC.
+
+        Ensures latest version of dataset is available before inference.
+        """
         subprocess.run(["dvc", "pull"], check=True)
 
     def run(self):
-        """Execute inference."""
+        """Execute inference pipeline.
+
+        Steps:
+        1. Pull data from DVC
+        2. Create DataModule for test set
+        3. Initialize model and load trained weights
+        4. Run evaluation using Lightning Trainer
+        """
         self._pull_data()
 
         dm = BeeDataModule(
@@ -47,6 +67,11 @@ class InferencePipeline:
 
 @hydra.main(version_base=None, config_path="../conf", config_name="infer_config")
 def infer(cfg: DictConfig):
+    """Main entry point for inference with Hydra configuration.
+
+    Args:
+        cfg: Hydra configuration loaded from infer_config.yaml
+    """
     pipeline = InferencePipeline(cfg)
     pipeline.run()
 
