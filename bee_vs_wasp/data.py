@@ -3,7 +3,7 @@ from pathlib import Path
 import lightning as l
 from torch.utils.data import DataLoader
 
-from .preprocessing import (
+from bee_vs_wasp.preprocessing import (
     BeeDataset,
     load_bee_dataset_csv,
     split_dataframes,

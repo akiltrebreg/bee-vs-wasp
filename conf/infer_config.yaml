@@ -1,7 +1,0 @@
-model_path: "bee_wasp_model.pt"
-dataset_root: "${hydra:runtime.cwd}/data"
-batch_size: 32
-num_workers: 4
-num_classes: 4
-lr: 0.001
-momentum: 0.9
