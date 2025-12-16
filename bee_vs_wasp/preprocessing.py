@@ -33,13 +33,19 @@ def load_bee_dataset_csv(labels_path: Path) -> pd.DataFrame:
     """Load and preprocess dataset CSV with label encoding.
 
     Normalizes file paths and encodes string labels to integers.
+
+    Args:
+        labels_path: Path to labels.csv file
+
+    Returns:
+        DataFrame with normalized paths and encoded labels
     """
     df = pd.read_csv(labels_path)
 
-    df["path"] = df["path"].apply(lambda x: x.replace("\\", "/"))
+    df["path"] = df["path"].apply(lambda path: path.replace("\\", "/"))
 
-    le = LabelEncoder()
-    df["label"] = le.fit_transform(df["label"])
+    label_encoder = LabelEncoder()
+    df["label"] = label_encoder.fit_transform(df["label"])
 
     return df
 
@@ -50,6 +56,12 @@ def split_dataframes(df: pd.DataFrame):
 
     Uses 'is_validation' and 'is_final_validation' flags to separate data.
     Returns tuple of (train_df, val_df, test_df) with reset indices.
+
+    Args:
+        df: DataFrame with 'is_validation' and 'is_final_validation' columns
+
+    Returns:
+        Tuple of (train_df, val_df, test_df) DataFrames
     """
     val_df = df[df["is_validation"] == 1].copy()
     test_df = df[df["is_final_validation"] == 1].copy()
@@ -96,15 +108,21 @@ class BeeDataset(Dataset):
 
         Reads image from disk, converts BGR to RGB, applies transforms.
         Returns (image, label) if train=True, else only image.
+
+        Args:
+            index: Index of sample to retrieve
+
+        Returns:
+            Tuple of (image, label) if train=True, else only image tensor
         """
         img_path = self.imgdir / self.df.iloc[index]["path"]
-        x = cv2.imread(str(img_path))
-        x = cv2.cvtColor(x, cv2.COLOR_BGR2RGB)
+        image = cv2.imread(str(img_path))
+        image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
 
         if self.transforms:
-            x = self.transforms(x)
+            image = self.transforms(image)
 
         if self.train:
-            y = int(self.df.iloc[index]["label"])
-            return x, y
-        return x
+            label = int(self.df.iloc[index]["label"])
+            return image, label
+        return image
