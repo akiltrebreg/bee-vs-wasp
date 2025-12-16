@@ -42,9 +42,17 @@
 
 ## Метрики
 
-- **Accuracy**: Вектор логитов
-- **F1-score (macro)**: После `argmax` модель возвращает целое число {0, 1, 2,
-  3}
+- **Accuracy (доля правильных предсказаний)** Основная метрика качества
+  классификации. Показывает, какая доля объектов была отнесена моделью к верному
+  классу (после применения `argmax` к выходным логитам).
+
+  **Цель:** максимизировать точность классификации.
+
+- **F1-score (macro)** Усреднённая F1-мера по всем классам без учёта их
+  дисбаланса. Характеризует баланс между **точностью (precision)** и **полнотой
+  (recall)** для каждого класса и особенно полезна в многоклассовых задачах с
+  «трудными» или неоднородными классами (например, `other_insect` или
+  `other_noinsect`).
 
 ## Датасет
 
@@ -165,3 +173,194 @@ uv run pre-commit install
 ```bash
 uv run pre-commit run --all-files
 ```
+
+### 4. Настройка pre-commit хуков
+
+#### Установка pre-commit хуков
+
+```bash
+uv run pre-commit install
+```
+
+#### Настройка MLflow (опционально)
+
+Для локального просмотра экспериментов запустите MLflow UI:
+
+```bash
+uvx --python 3.12 mlflow server --host 127.0.0.1 --port 8080
+```
+
+## Train
+
+### Базовое обучение
+
+Запуск обучения с параметрами по умолчанию (ResNet18, 15 эпох):
+
+```bash
+uv run python commands.py train
+```
+
+### Обучение с кастомными параметрами
+
+#### Изменение модели на SimpleCNN
+
+```bash
+uv run python commands.py train model=simple_cnn
+```
+
+#### Комбинация параметров (Рекомендуется для быстрой проверки)
+
+```bash
+uv run python commands.py train \
+  num_epochs=1 \
+  model=simple_cnn \
+  data.batch_size=8
+```
+
+### Доступные конфигурации
+
+#### Модели (`model=`)
+
+- `resnet` - ResNet18 с предобученными весами (по умолчанию)
+- `simple_cnn` - Легковесная CNN
+
+#### Параметры данных (`data.*`)
+
+- `data.batch_size` - Размер батча (по умолчанию: 32)
+- `data.num_workers` - Количество воркеров для загрузки данных (по умолчанию: 4)
+- `data.dataset_root` - Путь к датасету (по умолчанию: ./data)
+
+#### Параметры модели (`model.*`)
+
+- `model.lr` - Learning rate (по умолчанию: 0.001)
+- `model.momentum` - Momentum для SGD (по умолчанию: 0.9)
+
+### Результаты обучения
+
+После обучения:
+
+- **Модель сохраняется** в `models/<architecture>_<timestamp>.pth`
+- **Метрики логируются** в MLflow (папка `mlartifacts/` и база данных
+  `mlflow.db`)
+- **Логи Hydra** сохраняются в `outputs/<date>/<time>/`
+
+### Просмотр результатов в MLflow
+
+Откройте в браузере: http://127.0.0.1:8080/
+
+В интерфейсе вы увидите:
+
+- График train_loss, val_loss
+- Метрики train_acc, val_acc, train_f1, val_f1
+- Гиперпараметры эксперимента
+- Git commit ID для воспроизводимости
+
+---
+
+## Структура проекта
+
+```bash
+bee-vs-wasp/
+├── bee_vs_wasp/              # Основной пакет проекта
+│   ├── data.py               # Lightning DataModule
+│   ├── model.py              # Архитектуры моделей
+│   ├── module.py             # Lightning Module
+│   ├── preprocessing.py      # Препроцессинг и Dataset
+│   └── train.py              # Training pipeline
+├── commands.py               # Fire CLI интерфейс
+├── conf/                     # Hydra конфигурации
+│   ├── config.yaml           # Главный конфиг
+│   ├── data/                 # Конфиги данных
+│   ├── model/                # Конфиги моделей
+│   └── train/                # Конфиги обучения
+├── data/                     # Датасет (управляется DVC)
+│   ├── bee1/
+│   ├── bee2/
+│   ├── wasp1/
+│   ├── wasp2/
+│   ├── other_insect/
+│   ├── other_noinsect/
+│   └── labels.csv
+├── models/                   # Сохраненные модели
+├── outputs/                  # Hydra outputs
+├── mlartifacts/              # MLflow артефакты
+├── mlflow.db                 # MLflow база данных
+├── pyproject.toml            # Конфигурация проекта и зависимости
+├── uv.lock                   # Lock-файл зависимостей
+├── .pre-commit-config.yaml   # Конфигурация pre-commit
+└── README.md
+```
+
+---
+
+## Development
+
+### Проверка качества кода
+
+#### Запуск всех pre-commit хуков
+
+```bash
+uv run pre-commit run --all-files
+```
+
+#### Только Ruff проверка
+
+```bash
+uv run ruff check .
+```
+
+#### Ruff форматирование
+
+```bash
+uv run ruff format .
+```
+
+#### Автоисправление проблем
+
+```bash
+uv run ruff check --fix .
+```
+
+### Добавление зависимостей
+
+#### Добавить новую зависимость
+
+```bash
+uv add <package-name>
+```
+
+#### Добавить dev зависимость
+
+```bash
+uv add --dev <package-name>
+```
+
+#### Синхронизация после изменений
+
+```bash
+uv sync
+```
+
+---
+
+## Воспроизводимость
+
+Для полной воспроизводимости экспериментов:
+
+1. **Версия кода**: Каждый эксперимент логирует Git commit ID в MLflow
+2. **Зависимости**: Зафиксированы в `uv.lock`
+3. **Данные**: Версифицированы через DVC
+4. **Конфигурация**: Сохраняется в Hydra outputs
+5. **Random seed**: Можно задать через конфиг
+
+---
+
+## Лицензия
+
+См. файл [LICENSE](LICENSE)
+
+---
+
+## Контакты
+
+При возникновении вопросов создавайте issue в репозитории проекта.
