@@ -1,3 +1,5 @@
+"""PyTorch Lightning module for bee vs wasp classification."""
+
 import lightning as l
 import torch
 import torchmetrics
@@ -8,7 +10,8 @@ class BeeLightningModule(l.LightningModule):
     """Lightning module wrapper for classification models.
 
     Handles training loop, validation, testing and metric tracking.
-    Logs train_loss, train_acc, val_loss, val_acc metrics to experiment tracker.
+    Logs train_loss, train_acc, train_f1, val_loss, val_acc, val_f1
+    metrics to experiment tracker.
     """
 
     def __init__(
@@ -28,10 +31,24 @@ class BeeLightningModule(l.LightningModule):
         self.momentum = momentum
         self.num_classes = num_classes
 
+        # Loss function
         self.loss_fn = nn.CrossEntropyLoss()
+
+        # Accuracy metrics for each stage
         self.train_acc = torchmetrics.Accuracy(task="multiclass", num_classes=num_classes)
         self.val_acc = torchmetrics.Accuracy(task="multiclass", num_classes=num_classes)
         self.test_acc = torchmetrics.Accuracy(task="multiclass", num_classes=num_classes)
+
+        # F1-score (macro) metrics for each stage
+        self.train_f1 = torchmetrics.F1Score(
+            task="multiclass", num_classes=num_classes, average="macro"
+        )
+        self.val_f1 = torchmetrics.F1Score(
+            task="multiclass", num_classes=num_classes, average="macro"
+        )
+        self.test_f1 = torchmetrics.F1Score(
+            task="multiclass", num_classes=num_classes, average="macro"
+        )
 
     def forward(self, inputs):
         """Forward pass through the model.
@@ -58,10 +75,17 @@ class BeeLightningModule(l.LightningModule):
         logits = self(inputs)
         loss = self.loss_fn(logits, target)
 
-        self.train_acc(torch.argmax(logits, 1), target)
+        # Get predictions
+        preds = torch.argmax(logits, 1)
 
+        # Update metrics
+        self.train_acc(preds, target)
+        self.train_f1(preds, target)
+
+        # Log metrics to experiment tracker
         self.log("train_loss", loss, prog_bar=True)
         self.log("train_acc", self.train_acc, prog_bar=True)
+        self.log("train_f1", self.train_f1, prog_bar=True)
 
         return loss
 
@@ -76,10 +100,17 @@ class BeeLightningModule(l.LightningModule):
         logits = self(inputs)
         loss = self.loss_fn(logits, target)
 
-        self.val_acc(torch.argmax(logits, 1), target)
+        # Get predictions
+        preds = torch.argmax(logits, 1)
 
+        # Update metrics
+        self.val_acc(preds, target)
+        self.val_f1(preds, target)
+
+        # Log metrics to experiment tracker
         self.log("val_loss", loss, prog_bar=True)
         self.log("val_acc", self.val_acc, prog_bar=True)
+        self.log("val_f1", self.val_f1, prog_bar=True)
 
     def test_step(self, batch, batch_idx):
         """Test step for single batch.
@@ -91,9 +122,16 @@ class BeeLightningModule(l.LightningModule):
         inputs, target = batch
         logits = self(inputs)
 
-        self.test_acc(torch.argmax(logits, 1), target)
+        # Get predictions
+        preds = torch.argmax(logits, 1)
 
+        # Update metrics
+        self.test_acc(preds, target)
+        self.test_f1(preds, target)
+
+        # Log metrics to experiment tracker
         self.log("test_acc", self.test_acc, prog_bar=True)
+        self.log("test_f1", self.test_f1, prog_bar=True)
 
     def configure_optimizers(self):
         """Configure optimizer for training.
