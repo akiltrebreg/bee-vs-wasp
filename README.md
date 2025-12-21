@@ -261,34 +261,27 @@ uv run python commands.py train \
 
 ```bash
 bee-vs-wasp/
-├── bee_vs_wasp/              # Основной пакет проекта
-│   ├── data.py               # Lightning DataModule
-│   ├── model.py              # Архитектуры моделей
-│   ├── module.py             # Lightning Module
-│   ├── preprocessing.py      # Препроцессинг и Dataset
-│   └── train.py              # Training pipeline
-├── commands.py               # Fire CLI интерфейс
-├── conf/                     # Hydra конфигурации
-│   ├── config.yaml           # Главный конфиг
-│   ├── data/                 # Конфиги данных
-│   ├── model/                # Конфиги моделей
-│   └── train/                # Конфиги обучения
-├── data/                     # Датасет (управляется DVC)
-│   ├── bee1/
-│   ├── bee2/
-│   ├── wasp1/
-│   ├── wasp2/
-│   ├── other_insect/
-│   ├── other_noinsect/
-│   └── labels.csv
-├── models/                   # Сохраненные модели
-├── outputs/                  # Hydra outputs
-├── mlartifacts/              # MLflow артефакты
-├── mlflow.db                 # MLflow база данных
-├── pyproject.toml            # Конфигурация проекта и зависимости
-├── uv.lock                   # Lock-файл зависимостей
-├── .pre-commit-config.yaml   # Конфигурация pre-commit
-└── README.md
+├── bee_vs_wasp/               # Основной пакет проекта
+│   ├── data.py                # Lightning DataModule
+│   ├── model.py               # Архитектуры моделей
+│   ├── module.py              # Lightning Module
+│   ├── preprocessing.py       # Препроцессинг и Dataset
+│   └── train.py               # Training pipeline
+├── conf/                      # Hydra конфигурации
+│   ├── config.yaml            # Главный конфиг
+│   ├── data/                  # Конфиги данных
+│   ├── model/                 # Конфиги моделей
+│   └── train/                 # Конфиги обучения
+├── commands.py                # Fire CLI интерфейс для обучения и экспериментов
+├── data.dvc                   # DVC-трекер данных (описание удалённого датасета)
+├── .dvc/                      # Внутренние файлы и конфигурация DVC
+├── .dvcignore                 # Файлы и папки, игнорируемые DVC
+├── pyproject.toml             # Конфигурация проекта, зависимости и инструменты
+├── uv.lock                    # Lock-файл зависимостей
+├── .pre-commit-config.yaml    # Конфигурация pre-commit хуков
+├── .gitignore                 # Игнорируемые Git файлы и директории
+├── LICENSE                    # Лицензия проекта
+└── README.md                  # Документация проекта
 ```
 
 ---
