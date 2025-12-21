@@ -158,7 +158,7 @@ cd bee-vs-wasp
 uv sync
 ```
 
-### 3. Проверка pre-commit
+### 3. Запуск всех pre-commit хуков
 
 ```bash
 uv run pre-commit run --a
