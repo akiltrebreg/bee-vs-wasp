@@ -1,5 +1,3 @@
-"""PyTorch Lightning module for bee vs wasp classification."""
-
 import lightning as l
 import torch
 import torchmetrics
