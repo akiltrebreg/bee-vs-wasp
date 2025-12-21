@@ -184,13 +184,13 @@ uv run python commands.py train
 
 ### Обучение с кастомными параметрами
 
-#### Изменение модели на SimpleCNN
+Изменение модели на SimpleCNN
 
 ```bash
 uv run python commands.py train model=simple_cnn
 ```
 
-#### Комбинация параметров (Рекомендуется для быстрой проверки)
+Комбинация параметров (Рекомендуется для быстрой проверки)
 
 ```bash
 uv run python commands.py train \
