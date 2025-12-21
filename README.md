@@ -152,27 +152,7 @@ git clone <repository-url>
 cd bee-vs-wasp
 ```
 
-### 2. Установка uv
-
-#### macOS / Linux
-
-```bash
-curl -LsSf https://astral.sh/uv/install.sh | sh
-```
-
-#### Windows
-
-```bash
-powershell -c "irm https://astral.sh/uv/install.ps1 | iex"
-```
-
-#### Альтернативно через pip
-
-```bash
-pip install uv
-```
-
-### 3. Установка зависимостей
+### 2. Установка зависимостей
 
 Создание виртуального окружения и установка всех зависимостей:
 
@@ -180,7 +160,7 @@ pip install uv
 uv sync
 ```
 
-### 4. Настройка pre-commit хуков
+### 3. Настройка pre-commit хуков
 
 #### Установка pre-commit хуков
 
@@ -188,7 +168,7 @@ uv sync
 uv run pre-commit install
 ```
 
-#### Проверка (опционально)
+#### Проверка
 
 ```bash
 uv run pre-commit run --all-files
