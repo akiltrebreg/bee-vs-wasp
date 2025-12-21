@@ -154,32 +154,14 @@ cd bee-vs-wasp
 
 ### 2. Установка зависимостей
 
-Создание виртуального окружения и установка всех зависимостей:
-
 ```bash
 uv sync
 ```
 
-### 3. Настройка pre-commit хуков
-
-#### Установка pre-commit хуков
+### 3. Проверка pre-commit
 
 ```bash
-uv run pre-commit install
-```
-
-#### Проверка
-
-```bash
-uv run pre-commit run --all-files
-```
-
-### 4. Настройка pre-commit хуков
-
-#### Установка pre-commit хуков
-
-```bash
-uv run pre-commit install
+uv run pre-commit run --a
 ```
 
 #### Настройка MLflow (опционально)
