@@ -148,7 +148,7 @@ Kaggle.
 ### 1. Клонирование репозитория
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/akiltrebreg/bee-vs-wasp.git
 cd bee-vs-wasp
 ```
 
@@ -169,7 +169,7 @@ uv run pre-commit run --a
 Для локального просмотра экспериментов запустите MLflow UI:
 
 ```bash
-uvx --python 3.12 mlflow server --host 127.0.0.1 --port 8080
+uvx mlflow server --host 127.0.0.1 --port 8080
 ```
 
 ## Train
